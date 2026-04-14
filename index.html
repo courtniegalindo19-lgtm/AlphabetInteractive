@@ -1,122 +1,159 @@
 <!DOCTYPE html>
-  <html lang="en">
+<html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Alphabet Interactive</title>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <title>Alphabet Interactive</title>
     <style>
-      * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-      background: linear-gradient(135deg, #f0f8ff 0%, #e8f5e9 100%);
-              min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-}
-    h1 { font-size: 2rem; color: #333; margin-bottom: 8px; text-align: center; }
-    p.instructions { font-size: 1rem; color: #555; margin-bottom: 24px; text-align: center; }
-    .alphabet-grid {
-            display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-      gap: 14px;
-      width: 100%;
-      max-width: 900px;
-      }
-    .letter-card {
-            background: white;
-      border-radius: 16px;
-      padding: 18px 10px 14px;
-      text-align: center;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.10);
-      transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
-      user-select: none;
-      border: 3px solid transparent;
-}
-    .letter-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
-            .letter-card.active { background: #fff9c4; border-color: #f9a825; transform: scale(1.08); }
-    .letter-uppercase { font-size: 2.4rem; font-weight: 800; line-height: 1; color: #1565c0; }
-    .letter-lowercase { font-size: 1.5rem; font-weight: 600; color: #42a5f5; margin-top: 2px; }
-    .letter-example { font-size: 0.75rem; color: #888; margin-top: 6px; font-style: italic; }
-    .sound-display {
-      margin-top: 28px;
-      min-height: 80px;
-              background: white;
-            border-radius: 16px;
-      padding: 16px 28px;
-              box-shadow: 0 4px 12px rgba(0,0,0,0.10);
-      width: 100%;
-      max-width: 900px;
-              text-align: center;
-      font-size: 1.3rem;
-      color: #333;
-      display: flex;
-      align-items: center;
-              justify-content: center;
-}
-    .sound-display span { color: #1565c0; font-weight: 700; font-size: 1.6rem; }
-          </style>
-</head>
-<body>
-  <h1>Alphabet Sounds</h1>
-  <p class="instructions">Click any letter to hear its name and sound!</p>
-          <div class="alphabet-grid" id="grid"></div>
-  <div class="sound-display" id="display">Click a letter to get started!</div>
-  <script>
-            const letters = [
-        {letter:'A',sound:'aah',example:'Apple'},
-{letter:'B',sound:'buh',example:'Ball'},
-        {letter:'C',sound:'kuh',example:'Cat'},
-{letter:'D',sound:'duh',example:'Dog'},
-{letter:'E',sound:'eh',example:'Egg'},
-{letter:'F',sound:'fuh',example:'Fish'},
-{letter:'G',sound:'guh',example:'Goat'},
-{letter:'H',sound:'huh',example:'Hat'},
-        {letter:'I',sound:'ih',example:'Igloo'},
-{letter:'J',sound:'juh',example:'Jar'},
-{letter:'K',sound:'kuh',example:'Kite'},
-{letter:'L',sound:'luh',example:'Lion'},
-{letter:'M',sound:'muh',example:'Moon'},
-      {letter:'N',sound:'nuh',example:'Nest'},
-{letter:'O',sound:'oh',example:'Otter'},
-{letter:'P',sound:'puh',example:'Pig'},
-              {letter:'Q',sound:'kwuh',example:'Queen'},
-{letter:'R',sound:'ruh',example:'Rain'},
-{letter:'S',sound:'sss',example:'Sun'},
-{letter:'T',sound:'tuh',example:'Tree'},
-{letter:'U',sound:'uh',example:'Umbrella'},
-{letter:'V',sound:'vuh',example:'Van'},
-{letter:'W',sound:'wuh',example:'Wind'},
-{letter:'X',sound:'ks',example:'X-ray'},
-{letter:'Y',sound:'yuh',example:'Yarn'},
-      {letter:'Z',sound:'zzz',example:'Zebra'}
-    ];
-    const grid = document.getElementById('grid');
-    const display = document.getElementById('display');
-    let activeCard = null;
-    function speakLetter(letter, sound, example) {
-      window.speechSynthesis.cancel();
-      const msg = new SpeechSynthesisUtterance();
-      msg.text = letter + '. ' + sound + '. As in ' + example + '.';
-      msg.rate = 0.85;
-      msg.pitch = 1.1;
-              window.speechSynthesis.speak(msg);
-        }
-            letters.forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'letter-card';
-      card.innerHTML = '<div class="letter-uppercase">' + item.letter + '</div><div class="letter-lowercase">' + item.letter.toLowerCase() + '</div><div class="letter-example">' + item.example + '</div>';
-      card.addEventListener('click', () => {
-                if (activeCard) activeCard.classList.remove('active');
-        card.classList.add('active');
-        activeCard = card;
-        display.innerHTML = 'Letter <span>' + item.letter + '</span> says <span>' + item.sound + '</span> as in <span>' + item.example + '</span>';
-        speakLetter(item.letter, item.sound, item.example);
-});
-      grid.appendChild(card);
-});
-  </script>
-    </body>
-    </html>
+          * { box-sizing: border-box; margin: 0; padding: 0; }
+          body {
+                  font-family: 'Segoe UI', Arial, sans-serif;
+                  background: linear-gradient(135deg, #f0f8ff 0%, #e8f5e9 100%);
+                  min-height: 100vh;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  padding: 20px;
+          }
+          h1 { font-size: 2rem; color: #333; margin-bottom: 8px; text-align: center; }
+          p.instructions { font-size: 1rem; color: #555; margin-bottom: 24px; text-align: center; }
+          .alphabet-grid {
+                  display: grid;
+                  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+                  gap: 14px;
+                  width: 100%;
+                  max-width: 900px;
+          }
+          .letter-card {
+                  background: white;
+                  border-radius: 16px;
+                  padding: 18px 10px 14px;
+                  text-align: center;
+                  cursor: pointer;
+                  box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+                  transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+                  user-select: none;
+                  border: 3px solid transparent;
+          }
+          .letter-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+          .letter-card.active { background: #fff9c4; border-color: #f9a825; transform: scale(1.08); }
+          .letter-uppercase { font-size: 2.4rem; font-weight: 800; line-height: 1; color: #1565c0; }
+          .letter-lowercase { font-size: 1.5rem; font-weight: 600; color: #42a5f5; margin-top: 2px; }
+          .letter-example { font-size: 0.75rem; color: #888; margin-top: 6px; font-style: italic; }
+          .sound-display {
+                  margin-top: 28px;
+                  min-height: 80px;
+                  background: white;
+                  border-radius: 16px;
+                  padding: 16px 28px;
+                  box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+                  width: 100%;
+                  max-width: 900px;
+                  text-align: center;
+                  font-size: 1.3rem;
+                  color: #333;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+          }
+          .sound-display span { color: #1565c0; font-weight: 700; font-size: 1.6rem; }
+        </style>
+  </head>
+  <body>
+      <h1>Alphabet Sounds</h1>
+    <p class="instructions">Click any letter to hear its name and sound!</p>p>
+    <div class="alphabet-grid" id="grid"></div>div>
+    <div class="sound-display" id="display">Click a letter to get started!</div>div>
+    <script>
+          const letters = [
+            {letter:'A',sound:'aah',example:'Apple'},
+            {letter:'B',sound:'buh',example:'Ball'},
+            {letter:'C',sound:'kuh',example:'Cat'},
+            {letter:'D',sound:'duh',example:'Dog'},
+            {letter:'E',sound:'eh',example:'Egg'},
+            {letter:'F',sound:'fuh',example:'Fish'},
+            {letter:'G',sound:'guh',example:'Goat'},
+            {letter:'H',sound:'huh',example:'Hat'},
+            {letter:'I',sound:'ih',example:'Igloo'},
+            {letter:'J',sound:'juh',example:'Jar'},
+            {letter:'K',sound:'kuh',example:'Kite'},
+            {letter:'L',sound:'luh',example:'Lion'},
+            {letter:'M',sound:'muh',example:'Moon'},
+            {letter:'N',sound:'nuh',example:'Nest'},
+            {letter:'O',sound:'oh',example:'Otter'},
+            {letter:'P',sound:'puh',example:'Pig'},
+            {letter:'Q',sound:'kwuh',example:'Queen'},
+            {letter:'R',sound:'ruh',example:'Rain'},
+            {letter:'S',sound:'sss',example:'Sun'},
+            {letter:'T',sound:'tuh',example:'Tree'},
+            {letter:'U',sound:'uh',example:'Umbrella'},
+            {letter:'V',sound:'vuh',example:'Van'},
+            {letter:'W',sound:'wuh',example:'Wind'},
+            {letter:'X',sound:'ks',example:'X-ray'},
+            {letter:'Y',sound:'yuh',example:'Yarn'},
+            {letter:'Z',sound:'zzz',example:'Zebra'}
+                ];
+
+          const grid = document.getElementById('grid');
+          const display = document.getElementById('display');
+          let activeCard = null;
+          let selectedVoice = null;
+
+          const preferredVoices = [
+                  'Samantha',
+                  'Google US English',
+                  'Microsoft Aria Online (Natural) - English (United States)',
+                  'Microsoft Jenny Online (Natural) - English (United States)',
+                  'Microsoft Guy Online (Natural) - English (United States)',
+                  'Karen',
+                  'Daniel',
+                  'Alex',
+                ];
+
+          function loadBestVoice() {
+                  const voices = window.speechSynthesis.getVoices();
+                  if (voices.length === 0) return;
+                  for (const preferred of preferredVoices) {
+                            const match = voices.find(v => v.name.includes(preferred) && v.lang.startsWith('en'));
+                            if (match) { selectedVoice = match; return; }
+                  }
+                  const onlineEnglish = voices.find(v => v.lang.startsWith('en') && !v.localService);
+                  if (onlineEnglish) { selectedVoice = onlineEnglish; return; }
+                  const anyEnglish = voices.find(v => v.lang.startsWith('en'));
+                  if (anyEnglish) selectedVoice = anyEnglish;
+          }
+
+          window.speechSynthesis.onvoiceschanged = loadBestVoice;
+          loadBestVoice();
+
+          function speakLetter(letter, sound, example) {
+                  window.speechSynthesis.cancel();
+                  const msg = new SpeechSynthesisUtterance();
+                  msg.text = letter + '. ' + sound + '. As in ' + example + '.';
+                  msg.rate = 0.82;
+                  msg.pitch = 1.0;
+                  msg.volume = 1;
+                  if (selectedVoice) msg.voice = selectedVoice;
+                  window.speechSynthesis.speak(msg);
+          }
+
+          letters.forEach(item => {
+                  const card = document.createElement('div');
+                  card.className = 'letter-card';
+                  card.innerHTML = '<div class="letter-uppercase">' + item.letter + '</div><div class="letter-lowercase">' + item.letter.toLowerCase() + '</div><div class="letter-example">' + item.example + '</div>';
+                  card.addEventListener('click', () => {
+                            if (activeCard) activeCard.classList.remove('active');
+                            card.classList.add('active');
+                            activeCard = card;
+                            display.innerHTML = 'Letter <span>' + item.letter + '</span> says <span>' + item.sound + '</span> as in <span>' + item.example + '</span>';
+                            speakLetter(item.letter, item.sound, item.example);
+                  });
+                  grid.appendChild(card);
+          });
+    </script>
+  </body>
+</html>html>
+    </script></h1>
+  </body>
+    </style></title>
+  </head>
