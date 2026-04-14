@@ -1,154 +1,333 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-      <meta charset="UTF-8" />
+      <meta charset="UTF-8"/>
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-      <title>Alphabet Interactive</title>
+      <title>Alphabet Sounds</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet"/>
     <style>
           * { box-sizing: border-box; margin: 0; padding: 0; }
+
           body {
-                  font-family: 'Segoe UI', Arial, sans-serif;
-                  background: linear-gradient(135deg, #f0f8ff 0%, #e8f5e9 100%);
+                  font-family: 'Nunito', sans-serif;
+                  background: linear-gradient(160deg, #ffecd2 0%, #fcb69f 20%, #ffeaa7 40%, #a8edea 60%, #c3cfe2 80%, #e0c3fc 100%);
                   min-height: 100vh;
+                  padding: 24px 16px 40px;
                   display: flex;
                   flex-direction: column;
                   align-items: center;
-                  padding: 20px;
           }
-          h1 { font-size: 2rem; color: #333; margin-bottom: 8px; text-align: center; }
-          p.instructions { font-size: 1rem; color: #555; margin-bottom: 24px; text-align: center; }
+
+          h1 {
+                  font-family: 'Fredoka One', cursive;
+                  font-size: 2.8rem;
+                  color: #fff;
+                  text-shadow: 3px 3px 0 #f472b6, 5px 5px 0 rgba(0,0,0,0.1);
+                  margin-bottom: 6px;
+                  text-align: center;
+                  letter-spacing: 1px;
+          }
+
+          .subtitle {
+                  font-size: 1.05rem;
+                  color: #fff;
+                  font-weight: 700;
+                  margin-bottom: 28px;
+                  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+                  text-align: center;
+          }
+
+          /* 4-column grid for A-X, then last 2 centered */
           .alphabet-grid {
                   display: grid;
-                  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+                  grid-template-columns: repeat(4, 1fr);
                   gap: 14px;
                   width: 100%;
-                  max-width: 900px;
+                  max-width: 700px;
           }
+
+          .last-row {
+                  grid-column: 1 / -1;
+                  display: flex;
+                  justify-content: center;
+                  gap: 14px;
+                  margin-top: 0;
+          }
+
+          .last-row .letter-card {
+                  width: calc(25% - 11px);
+                  max-width: 160px;
+          }
+
+          /* Rainbow colors cycling through 7 */
+          .color-0 { background: linear-gradient(135deg, #ff6b6b, #ee5a24); }
+          .color-1 { background: linear-gradient(135deg, #fd9644, #e55039); }
+          .color-2 { background: linear-gradient(135deg, #ffd32a, #f9ca24); }
+          .color-3 { background: linear-gradient(135deg, #26de81, #20bf6b); }
+          .color-4 { background: linear-gradient(135deg, #45aaf2, #2d98da); }
+          .color-5 { background: linear-gradient(135deg, #a29bfe, #6c5ce7); }
+          .color-6 { background: linear-gradient(135deg, #fd79a8, #e84393); }
+
           .letter-card {
-                  background: white;
-                  border-radius: 16px;
-                  padding: 18px 10px 14px;
+                  border-radius: 24px;
+                  padding: 16px 8px 14px;
                   text-align: center;
                   cursor: pointer;
-                  box-shadow: 0 4px 12px rgba(0,0,0,0.10);
-                  transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+                  box-shadow: 0 6px 0 rgba(0,0,0,0.15), 0 8px 20px rgba(0,0,0,0.12);
+                  transition: transform 0.12s ease, box-shadow 0.12s ease;
                   user-select: none;
-                  border: 3px solid transparent;
+                  border: 3px solid rgba(255,255,255,0.5);
+                  position: relative;
+                  overflow: hidden;
           }
-          .letter-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
-          .letter-card.active { background: #fff9c4; border-color: #f9a825; transform: scale(1.08); }
-          .letter-uppercase { font-size: 2.4rem; font-weight: 800; line-height: 1; color: #1565c0; }
-          .letter-lowercase { font-size: 1.5rem; font-weight: 600; color: #42a5f5; margin-top: 2px; }
-          .letter-example { font-size: 0.75rem; color: #888; margin-top: 6px; font-style: italic; }
-          .sound-display {
-                  margin-top: 28px;
-                  min-height: 80px;
-                  background: white;
-                  border-radius: 16px;
-                  padding: 16px 28px;
-                  box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+
+          .letter-card::before {
+                  content: '';
+                  position: absolute;
+                  top: 0; left: 0; right: 0;
+                  height: 45%;
+                  background: rgba(255,255,255,0.18);
+                  border-radius: 22px 22px 60% 60%;
+          }
+
+          .letter-card:hover {
+                  transform: translateY(-5px) scale(1.04);
+                  box-shadow: 0 10px 0 rgba(0,0,0,0.15), 0 14px 28px rgba(0,0,0,0.15);
+          }
+
+          .letter-card:active {
+                  transform: translateY(2px);
+                  box-shadow: 0 2px 0 rgba(0,0,0,0.15);
+          }
+
+          .letter-card.active {
+                  transform: translateY(-5px) scale(1.06);
+                  box-shadow: 0 10px 0 rgba(0,0,0,0.2), 0 0 0 4px #fff, 0 0 0 7px rgba(255,255,255,0.5);
+          }
+
+          .letter-display {
+                  font-family: 'Fredoka One', cursive;
+                  font-size: 2.2rem;
+                  color: #fff;
+                  text-shadow: 2px 2px 0 rgba(0,0,0,0.15);
+                  line-height: 1;
+                  position: relative;
+          }
+
+          .letter-display .upper { font-size: 2.4rem; }
+          .letter-display .lower { font-size: 1.8rem; opacity: 0.88; }
+          .letter-display .sep { opacity: 0.5; font-size: 1.6rem; margin: 0 2px; }
+
+          /* Pop-up reveal panel */
+          .reveal-panel {
                   width: 100%;
-                  max-width: 900px;
-                  text-align: center;
-                  font-size: 1.3rem;
-                  color: #333;
+                  max-width: 700px;
+                  margin-top: 22px;
+                  background: white;
+                  border-radius: 28px;
+                  padding: 22px 28px;
+                  box-shadow: 0 8px 32px rgba(0,0,0,0.13);
                   display: flex;
                   align-items: center;
                   justify-content: center;
+                  gap: 24px;
+                  min-height: 120px;
+                  transition: all 0.3s ease;
+                  border: 3px solid #ffecd2;
           }
-          .sound-display span { color: #1565c0; font-weight: 700; font-size: 1.6rem; }
+
+          .reveal-panel.hidden {
+                  opacity: 0.4;
+          }
+
+          .reveal-emoji {
+                  font-size: 5rem;
+                  line-height: 1;
+                  filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));
+                  animation: bounceIn 0.4s ease;
+          }
+
+          @keyframes bounceIn {
+                  0% { transform: scale(0.3); opacity: 0; }
+                  60% { transform: scale(1.15); }
+                  100% { transform: scale(1); opacity: 1; }
+          }
+
+          .reveal-text {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 4px;
+          }
+
+          .reveal-letter {
+                  font-family: 'Fredoka One', cursive;
+                  font-size: 2.6rem;
+                  line-height: 1;
+          }
+
+          .reveal-word {
+                  font-family: 'Fredoka One', cursive;
+                  font-size: 1.6rem;
+                  color: #555;
+          }
+
+          .reveal-hint {
+                  font-size: 0.9rem;
+                  color: #aaa;
+                  font-weight: 700;
+          }
+
+          .placeholder-text {
+                  font-family: 'Fredoka One', cursive;
+                  font-size: 1.3rem;
+                  color: #ccc;
+                  text-align: center;
+          }
+
+          /* Stars decoration */
+          .stars {
+                  font-size: 1.2rem;
+                  position: absolute;
+                  top: 4px; right: 8px;
+                  opacity: 0;
+                  transition: opacity 0.3s;
+          }
+          .letter-card.active .stars { opacity: 1; }
         </style>
   </head>
   <body>
-      <h1>Alphabet Sounds</h1>
-    <p class="instructions">Click any letter to hear its name and sound!</p>p>
-    <div class="alphabet-grid" id="grid"></div>div>
-    <div class="sound-display" id="display">Click a letter to get started!</div>div>
+
+      <h1>ABC Fun!</h1>
+    <p class="subtitle">Click a letter to see its picture and hear its sound!</p>p>
+  
+    <div class="alphabet-grid" id="mainGrid"></div>div>
+    <div class="last-row" id="lastRow"></div>div>
+  
+    <div class="reveal-panel hidden" id="revealPanel">
+        <p class="placeholder-text">👆 Pick a letter!</p>p>
+    </div>div>
+  
     <script>
           const letters = [
-            {letter:'A',sound:'aah',example:'Apple'},
-            {letter:'B',sound:'buh',example:'Ball'},
-            {letter:'C',sound:'kuh',example:'Cat'},
-            {letter:'D',sound:'duh',example:'Dog'},
-            {letter:'E',sound:'eh',example:'Egg'},
-            {letter:'F',sound:'fuh',example:'Fish'},
-            {letter:'G',sound:'guh',example:'Goat'},
-            {letter:'H',sound:'huh',example:'Hat'},
-            {letter:'I',sound:'ih',example:'Igloo'},
-            {letter:'J',sound:'juh',example:'Jar'},
-            {letter:'K',sound:'kuh',example:'Kite'},
-            {letter:'L',sound:'luh',example:'Lion'},
-            {letter:'M',sound:'muh',example:'Moon'},
-            {letter:'N',sound:'nuh',example:'Nest'},
-            {letter:'O',sound:'oh',example:'Otter'},
-            {letter:'P',sound:'puh',example:'Pig'},
-            {letter:'Q',sound:'kwuh',example:'Queen'},
-            {letter:'R',sound:'ruh',example:'Rain'},
-            {letter:'S',sound:'sss',example:'Sun'},
-            {letter:'T',sound:'tuh',example:'Tree'},
-            {letter:'U',sound:'uh',example:'Umbrella'},
-            {letter:'V',sound:'vuh',example:'Van'},
-            {letter:'W',sound:'wuh',example:'Wind'},
-            {letter:'X',sound:'ks',example:'X-ray'},
-            {letter:'Y',sound:'yuh',example:'Yarn'},
-            {letter:'Z',sound:'zzz',example:'Zebra'}
+            {letter:'A', example:'Apple',    emoji:'🍎'},
+            {letter:'B', example:'Butterfly',emoji:'🦋'},
+            {letter:'C', example:'Cat',      emoji:'🐱'},
+            {letter:'D', example:'Dog',      emoji:'🐶'},
+            {letter:'E', example:'Elephant', emoji:'🐘'},
+            {letter:'F', example:'Fish',     emoji:'🐠'},
+            {letter:'G', example:'Giraffe',  emoji:'🦒'},
+            {letter:'H', example:'Heart',    emoji:'❤️'},
+            {letter:'I', example:'Ice Cream',emoji:'🍦'},
+            {letter:'J', example:'Jellyfish',emoji:'🪼'},
+            {letter:'K', example:'Kite',     emoji:'🪁'},
+            {letter:'L', example:'Lion',     emoji:'🦁'},
+            {letter:'M', example:'Moon',     emoji:'🌙'},
+            {letter:'N', example:'Nest',     emoji:'🪺'},
+            {letter:'O', example:'Octopus',  emoji:'🐙'},
+            {letter:'P', example:'Penguin',  emoji:'🐧'},
+            {letter:'Q', example:'Queen',    emoji:'👑'},
+            {letter:'R', example:'Rainbow',  emoji:'🌈'},
+            {letter:'S', example:'Star',     emoji:'⭐'},
+            {letter:'T', example:'Tiger',    emoji:'🐯'},
+            {letter:'U', example:'Umbrella', emoji:'☂️'},
+            {letter:'V', example:'Volcano',  emoji:'🌋'},
+            {letter:'W', example:'Whale',    emoji:'🐳'},
+            {letter:'X', example:'X-ray',    emoji:'🦴'},
+            {letter:'Y', example:'Yarn',     emoji:'🧶'},
+            {letter:'Z', example:'Zebra',    emoji:'🦓'}
                 ];
 
-          const grid = document.getElementById('grid');
-          const display = document.getElementById('display');
-          let activeCard = null;
+          const phonics = {
+                  A:'aah', B:'buh', C:'kuh', D:'duh', E:'eh',
+                  F:'fuh', G:'guh', H:'huh', I:'ih',  J:'juh',
+                  K:'kuh', L:'luh', M:'muh', N:'nuh', O:'oh',
+                  P:'puh', Q:'kwuh',R:'ruh', S:'sss', T:'tuh',
+                  U:'uh',  V:'vuh', W:'wuh', X:'ks',  Y:'yuh', Z:'zzz'
+          };
+
+          const rainbowColors = ['color-0','color-1','color-2','color-3','color-4','color-5','color-6'];
+
+          const mainGrid  = document.getElementById('mainGrid');
+          const lastRow   = document.getElementById('lastRow');
+          const panel     = document.getElementById('revealPanel');
+
+          let activeCard  = null;
           let selectedVoice = null;
 
           const preferredVoices = [
-                  'Samantha',
-                  'Google US English',
+                  'Samantha','Google US English',
                   'Microsoft Aria Online (Natural) - English (United States)',
                   'Microsoft Jenny Online (Natural) - English (United States)',
-                  'Microsoft Guy Online (Natural) - English (United States)',
-                  'Karen',
-                  'Daniel',
-                  'Alex',
+                  'Karen','Daniel','Alex'
                 ];
 
           function loadBestVoice() {
                   const voices = window.speechSynthesis.getVoices();
-                  if (voices.length === 0) return;
-                  for (const preferred of preferredVoices) {
-                            const match = voices.find(v => v.name.includes(preferred) && v.lang.startsWith('en'));
-                            if (match) { selectedVoice = match; return; }
+                  if (!voices.length) return;
+                  for (const p of preferredVoices) {
+                            const m = voices.find(v => v.name.includes(p) && v.lang.startsWith('en'));
+                            if (m) { selectedVoice = m; return; }
                   }
-                  const onlineEnglish = voices.find(v => v.lang.startsWith('en') && !v.localService);
-                  if (onlineEnglish) { selectedVoice = onlineEnglish; return; }
-                  const anyEnglish = voices.find(v => v.lang.startsWith('en'));
-                  if (anyEnglish) selectedVoice = anyEnglish;
+                  const online = voices.find(v => v.lang.startsWith('en') && !v.localService);
+                  if (online) { selectedVoice = online; return; }
+                  const any = voices.find(v => v.lang.startsWith('en'));
+                  if (any) selectedVoice = any;
           }
-
           window.speechSynthesis.onvoiceschanged = loadBestVoice;
           loadBestVoice();
 
-          function speakLetter(letter, sound, example) {
+          function speak(letter, sound, word) {
                   window.speechSynthesis.cancel();
                   const msg = new SpeechSynthesisUtterance();
-                  msg.text = letter + '. ' + sound + '. As in ' + example + '.';
-                  msg.rate = 0.82;
-                  msg.pitch = 1.0;
-                  msg.volume = 1;
+                  msg.text = letter + '. ' + sound + '. ' + word + '.';
+                  msg.rate = 0.82; msg.pitch = 1.1; msg.volume = 1;
                   if (selectedVoice) msg.voice = selectedVoice;
                   window.speechSynthesis.speak(msg);
           }
 
-          letters.forEach(item => {
+          function showReveal(item, colorClass) {
+                  const color = colorClass.replace('color-','');
+                  const gradients = [
+                            '#ff6b6b','#fd9644','#ffd32a','#26de81','#45aaf2','#a29bfe','#fd79a8'
+                          ];
+                  const c = gradients[parseInt(color)] || '#45aaf2';
+                  panel.classList.remove('hidden');
+                  panel.innerHTML =
+                            '<div class="reveal-emoji">' + item.emoji + '</div>' +
+                            '<div class="reveal-text">' +
+                              '<div class="reveal-letter" style="color:' + c + '">' +
+                                item.letter + ' ' + item.letter.toLowerCase() +
+                              '</div>' +
+                              '<div class="reveal-word">' + item.example + '</div>' +
+                              '<div class="reveal-hint">says "' + phonics[item.letter] + '"</div>' +
+                            '</div>';
+          }
+
+          letters.forEach((item, i) => {
+                  const colorClass = rainbowColors[i % 7];
                   const card = document.createElement('div');
-                  card.className = 'letter-card';
-                  card.innerHTML = '<div class="letter-uppercase">' + item.letter + '</div><div class="letter-lowercase">' + item.letter.toLowerCase() + '</div><div class="letter-example">' + item.example + '</div>';
+                  card.className = 'letter-card ' + colorClass;
+                  card.innerHTML =
+                            '<span class="stars">✨</span>' +
+                            '<div class="letter-display">' +
+                              '<span class="upper">' + item.letter + '</span>' +
+                              '<span class="sep"> · </span>' +
+                              '<span class="lower">' + item.letter.toLowerCase() + '</span>' +
+                            '</div>';
+
                   card.addEventListener('click', () => {
                             if (activeCard) activeCard.classList.remove('active');
                             card.classList.add('active');
                             activeCard = card;
-                            display.innerHTML = 'Letter <span>' + item.letter + '</span> says <span>' + item.sound + '</span> as in <span>' + item.example + '</span>';
-                            speakLetter(item.letter, item.sound, item.example);
+                            showReveal(item, colorClass);
+                            speak(item.letter, phonics[item.letter], item.example);
                   });
-                  grid.appendChild(card);
+
+                  if (i < 24) {
+                            mainGrid.appendChild(card);
+                  } else {
+                            lastRow.appendChild(card);
+                  }
           });
     </script>
   </body>
